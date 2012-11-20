@@ -1,5 +1,73 @@
 calendar_name = 'TimeTracking';
+work_hours = '25:00:00';
+start_year = 2012;
+start_month = 10;
 
+/* Set finish time of todays work day to the current time */
+function stillWork() {
+  var Calendar = CalendarApp.getCalendarsByName(calendar_name);
+  var sheetName = calendar_name;
+  
+  todayStart = new Date();
+  todayStart.setHours(0);
+  todayStart.setMinutes(0);
+  todayEnd = new Date();
+  todayEnd.setHours(23);
+  todayEnd.setMinutes(59);
+  var events = Calendar[0].getEvents(todayStart , todayEnd);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  var psheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Plans");
+  
+  if (events[0]) {
+    event = events[events.length-1];
+    event.setTime(event.getStartTime(), new Date());
+  } else {
+    end = new Date();
+    end.setHours(20);
+    end.setMinutes(30);
+    Calendar[0].createEvent("", new Date(), end);
+  }
+  
+  importEvents();
+}
+
+/* Set time when you arrived at work */
+function setStartWork(e) {
+  var Calendar = CalendarApp.getCalendarsByName(calendar_name);
+  var sheetName = calendar_name;
+  
+  todayStart = new Date();
+  todayStart.setHours(0);
+  todayStart.setMinutes(0);
+  todayEnd = new Date();
+  todayEnd.setHours(23);
+  todayEnd.setMinutes(59);
+  var events = Calendar[0].getEvents(todayStart , todayEnd);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  var psheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Plans");
+  
+  if (events[0]) {
+    event = events[events.length-1];
+    start = new Date();
+    start.setHours(e.parameter.hh);
+    start.setMinutes(e.parameter.mm);
+    
+    event.setTime(start, new Date());
+  } else {
+    start = new Date();
+    start.setHours(e.parameter.hh);
+    start.setMinutes(e.parameter.mm);
+    Calendar[0].createEvent(e.parameter.comment, start, new Date());
+  }
+  
+  
+  var app = UiApp.getActiveApplication();
+  app.close();
+  
+  importEvents();
+}
+
+/* Import work days from calendar */
 function importEvents() {
   function getWorkHoursCell(d) {
     //can be depended on date
@@ -7,7 +75,7 @@ function importEvents() {
   }
   
   function fillWorkHoursCells(sheet) {
-    sheet.getRange("H1").setValue("25:00:00");
+    sheet.getRange("H1").setValue(work_hours);
   }
   
   function getWeekNumber(d) {
@@ -59,8 +127,8 @@ function importEvents() {
     sheet.getRange(lineN,6).setValue(eventTitle);
   }
   
-  var year = 2012;
-  var month = 10;
+  var year = start_year;
+  var month = start_month;
   var startDate = new Date(year, month-1, 1);
   var endDate = new Date();
   endDate.setDate(40);
@@ -148,66 +216,4 @@ function importEvents() {
   var app = UiApp.getActiveApplication();
   app.close();
   return app;  
-}
-
-function stillWork() {
-  var Calendar = CalendarApp.getCalendarsByName(calendar_name);
-  var sheetName = calendar_name;
-  
-  todayStart = new Date();
-  todayStart.setHours(0);
-  todayStart.setMinutes(0);
-  todayEnd = new Date();
-  todayEnd.setHours(23);
-  todayEnd.setMinutes(59);
-  var events = Calendar[0].getEvents(todayStart , todayEnd);
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-  var psheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Plans");
-  
-  if (events[0]) {
-    event = events[events.length-1];
-    event.setTime(event.getStartTime(), new Date());
-  } else {
-    end = new Date();
-    end.setHours(20);
-    end.setMinutes(30);
-    Calendar[0].createEvent("", new Date(), end);
-  }
-  
-  importEvents();
-}
-
-function setStartWork(e) {
-  var Calendar = CalendarApp.getCalendarsByName(calendar_name);
-  var sheetName = calendar_name;
-  
-  todayStart = new Date();
-  todayStart.setHours(0);
-  todayStart.setMinutes(0);
-  todayEnd = new Date();
-  todayEnd.setHours(23);
-  todayEnd.setMinutes(59);
-  var events = Calendar[0].getEvents(todayStart , todayEnd);
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-  var psheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Plans");
-  
-  if (events[0]) {
-    event = events[events.length-1];
-    start = new Date();
-    start.setHours(e.parameter.hh);
-    start.setMinutes(e.parameter.mm);
-    
-    event.setTime(start, new Date());
-  } else {
-    start = new Date();
-    start.setHours(e.parameter.hh);
-    start.setMinutes(e.parameter.mm);
-    Calendar[0].createEvent(e.parameter.comment, start, new Date());
-  }
-  
-  
-  var app = UiApp.getActiveApplication();
-  app.close();
-  
-  importEvents();
 }

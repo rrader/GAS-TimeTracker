@@ -1,5 +1,5 @@
 function uiStartWork() {
-  var app = UiApp.createApplication().setTitle('Начало работы');
+  var app = UiApp.createApplication().setTitle('Arrived at work at...');
 
   var grid = app.createGrid(2, 3);
   grid.setWidget(0, 0, app.createLabel('Start time:'));
@@ -22,8 +22,8 @@ function uiStartWork() {
 
 function onOpen() {   
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var menuEntries = [{name: "Import from calendar", functionName: "importEvents"},
+  var menuEntries = [{name: "Reload from calendar", functionName: "importEvents"},
                      {name: "Still on work", functionName: "stillWork"},
-                     {name: "Work start", functionName: "uiStartWork"}];
-  ss.addMenu("Import events", menuEntries);  
+                     {name: "Arrived at work", functionName: "uiStartWork"}];
+  ss.addMenu("TimeTracker", menuEntries);  
 }
