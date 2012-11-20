@@ -2,6 +2,11 @@ calendar_name = 'TimeTracking';
 work_hours = '25:00:00';
 start_year = 2012;
 start_month = 10;
+usual_day_start_h = 17;
+usual_day_start_m = 0;
+usual_day_end_h = 20;
+usual_day_end_m = 30;
+
 
 /* Set finish time of todays work day to the current time */
 function stillWork() {
@@ -198,12 +203,12 @@ function importEvents() {
     for (i = dayNum; i < 6; i++) {
       
       day_start = new Date(day_date);
-      day_start.setHours(17);
-      day_start.setMinutes(0);
+      day_start.setHours(usual_day_start_h);
+      day_start.setMinutes(usual_day_start_m);
       
       day_end = new Date(day_date);
-      day_end.setHours(20);
-      day_end.setMinutes(30);
+      day_end.setHours(usual_day_end_h);
+      day_end.setMinutes(usual_day_end_m);
       fillLine(day_start, day_end, "", lineN, psheet);
       day_date.setDate(day_date.getDate() + 1);
       lineN++;
