@@ -1,5 +1,7 @@
 TimeTracker based on Google Spreadsheets and Apps Script
 
+[![endorse](http://api.coderwall.com/antigluk/endorsecount.png)](http://coderwall.com/antigluk)
+
 Installation
 -----------------------------
 
